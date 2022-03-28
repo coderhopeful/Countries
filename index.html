@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Countries</h1>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8 mt-4">
+                <select name="countryoptions" id="cntry" onchange="fetchData()">
+                    <option value="">Choose Country</option>
+                </select>
+            </div>
+            <div class="col-2"></div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div id="result"></div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+
+
+</body>
+<script>
+    var country = []
+    fetch("https://restcountries.com/v2/all").then(resp => resp.json()).then(data => {
+        data.forEach(u => {
+        country.push(u)
+        var selected = document.querySelector("#cntry")
+        let option = document.createElement('option')
+        option.text = u.name;
+        option.value = u.name;
+        selected.appendChild(option);
+        })
+    })
+
+   
+
+
+
+    function fetchData() {
+        let selected_cntry = cntry.value
+
+        let product = country.find(p => p.name == selected_cntry)
+
+        displayProduct(product)
+    }
+
+    function displayProduct(c) {
+        let html_data = `
+<div class="card mt-3" style="width: 18rem;">
+  <img src="${c.flag}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title"><b>${c.name}</b></h5>
+    
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><b>Currency Symbol :</b> ${c.currencies[0].symbol}</li>
+    <li class="list-group-item"><b>Currency: </b>${c.currencies[0].name}</li>
+    <li class="list-group-item"><b>Capital :</b> ${c.capital}</li>
+  </ul>
+  
+</div>
+
+`
+result.innerHTML = html_data
+
+
+    };
+
+
+</script>
+
+</html>
